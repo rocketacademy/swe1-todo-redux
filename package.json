@@ -1,0 +1,58 @@
+{
+  "name": "todo-redux",
+  "homepage": "https://kylerwsm.github.io/todo-redux/",
+  "version": "0.1.0",
+  "author": {
+    "name": "Kyler Wong",
+    "email": "me@kylerwong.dev",
+    "url": "https://kylerwong.dev"
+  },
+  "description": "A simple todo app built in React and Redux",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.9.12",
+    "@material-ui/icons": "^4.9.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1"
+  },
+  "scripts": {
+    "prettier": "prettier --write \"src/**/*.{js,jsx}\"",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "gh-pages": "^2.2.0",
+    "husky": ">=4",
+    "lint-staged": ">=10",
+    "prettier": "^2.0.5",
+    "prop-types": "^15.7.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
+  }
+}
