@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import {
   AppBar,
   Button,
@@ -7,13 +8,12 @@ import {
   createStyles,
   makeStyles,
   Grid,
-  useTheme,
-  useMediaQuery,
 } from '@material-ui/core'
 import TodoCard from './TodoCard'
+
+import * as Actions from '../actions'
 import ScrollToTopButton from './ScrollToTopButton'
 import CreateTodoDialog from './CreateTodoDialog'
-import StoreContext from '../store'
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -48,12 +48,19 @@ const useStyles = makeStyles((theme) =>
   }),
 )
 
-const App = () => {
+const mapState = (state) => ({
+  todos: state.todos.todos,
+})
+
+const mapDispatch = (dispatch) => ({
+  openCreateTodoDialog: () => {
+    dispatch(Actions.openCreateTodoDialog())
+  },
+})
+
+const App = ({ openCreateTodoDialog, todos }) => {
   // Used to control our create todo modal.
   const classes = useStyles()
-  const { setOpenModal, todos } = useContext(StoreContext)
-  const theme = useTheme()
-  const isMobileView = useMediaQuery(theme.breakpoints.only('xs'))
 
   useEffect(() => {
     // Any updates to the backend should come here.
@@ -74,7 +81,7 @@ const App = () => {
             </Typography>
             <Button
               variant="contained"
-              onClick={() => setOpenModal(true)}
+              onClick={openCreateTodoDialog}
               color="primary"
               size="large"
             >
@@ -85,7 +92,7 @@ const App = () => {
         <ScrollToTopButton />
         <Grid container spacing={4}>
           {todos.map((todo) => (
-            <Grid item direction={isMobileView ? 'row' : 'column'}>
+            <Grid key={todo.id} item>
               <TodoCard
                 key={todo.id}
                 id={todo.id}
@@ -103,4 +110,4 @@ const App = () => {
   )
 }
 
-export default App
+export default connect(mapState, mapDispatch)(App)

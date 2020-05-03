@@ -1,4 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import {
   Button,
@@ -9,7 +10,8 @@ import {
   createStyles,
   makeStyles,
 } from '@material-ui/core'
-import StoreContext from '../store'
+
+import * as Actions from '../actions'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -21,26 +23,24 @@ const useStyles = makeStyles(() =>
   }),
 )
 
-export default function TodoCard({ id, title, body, done }) {
+const mapDispatch = (dispatch) => ({
+  deleteTodoItem: (payload) => {
+    dispatch(Actions.deleteTodoItem(payload))
+  },
+  toggleTodoItemStatus: (payload) => {
+    dispatch(Actions.toggleTodoItemStatus(payload))
+  },
+})
+
+const TodoCard = ({
+  deleteTodoItem,
+  toggleTodoItemStatus,
+  id,
+  title,
+  body,
+  done,
+}) => {
   const classes = useStyles({ done })
-  const { todos, setTodos } = useContext(StoreContext)
-
-  // Toggles the done status of this todo item.
-  const toggleDoneStatus = () => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id === id) {
-          return { ...todo, done: !todo.done }
-        }
-        return { ...todo }
-      }),
-    )
-  }
-
-  // Removes this todo item from the list of todo items.
-  const deleteTodo = () => {
-    setTodos(todos.filter((todo) => todo.id !== id))
-  }
 
   return (
     <Card className={classes.root}>
@@ -53,10 +53,18 @@ export default function TodoCard({ id, title, body, done }) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button onClick={toggleDoneStatus} size="small" color="primary">
+        <Button
+          onClick={() => toggleTodoItemStatus({ id })}
+          size="small"
+          color="primary"
+        >
           {done ? 'Done' : 'Mark as done'}
         </Button>
-        <Button onClick={deleteTodo} size="small" color="secondary">
+        <Button
+          onClick={() => deleteTodoItem({ id })}
+          size="small"
+          color="secondary"
+        >
           Delete
         </Button>
       </CardActions>
@@ -69,3 +77,5 @@ TodoCard.propTypes = {
   body: PropTypes.string.isRequired,
   done: PropTypes.bool.isRequired,
 }
+
+export default connect(null, mapDispatch)(TodoCard)

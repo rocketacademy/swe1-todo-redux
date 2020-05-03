@@ -1,4 +1,6 @@
-import React, { useContext, useRef } from 'react'
+import React, { useRef } from 'react'
+import { connect } from 'react-redux'
+import * as Action from '../actions'
 import {
   Button,
   Dialog,
@@ -8,17 +10,31 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core'
-import StoreContext from '../store'
 
-const CreateTodoDialog = () => {
-  const { openModal, setOpenModal, todos, setTodos } = useContext(StoreContext)
+const mapState = (state) => ({
+  openCreateTodoDialog: state.modals.openCreateTodoDialog,
+})
+
+const mapDispatch = (dispatch) => ({
+  createTodoItem: (payload) => {
+    dispatch(Action.createTodoItem(payload))
+  },
+  closeCreateTodoDialog: () => {
+    dispatch(Action.closeCreateTodoDialog())
+  },
+})
+
+const CreateTodoDialog = ({
+  createTodoItem,
+  openCreateTodoDialog,
+  closeCreateTodoDialog,
+}) => {
   const titleEl = useRef(null)
   const descriptionEl = useRef(null)
 
-  const handleClose = () => setOpenModal(false)
+  const handleClose = closeCreateTodoDialog
 
   const handleSubmit = () => {
-    console.log(titleEl)
     const todo = {
       id: new Date().getTime(),
       title: titleEl.current.value
@@ -29,15 +45,14 @@ const CreateTodoDialog = () => {
         : 'This todo item does not have a body.',
       done: false,
     }
-    todos.push(todo)
-    setTodos(todos)
+    createTodoItem({ ...todo })
     handleClose()
   }
 
   return (
     <div>
       <Dialog
-        open={openModal}
+        open={openCreateTodoDialog}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
         fullWidth={true}
@@ -80,4 +95,4 @@ const CreateTodoDialog = () => {
   )
 }
 
-export default CreateTodoDialog
+export default connect(mapState, mapDispatch)(CreateTodoDialog)
