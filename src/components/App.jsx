@@ -56,16 +56,18 @@ const mapDispatch = (dispatch) => ({
   openCreateTodoDialog: () => {
     dispatch(Actions.openCreateTodoDialog())
   },
+  fetchTodoItems: () => {
+    dispatch(Actions.fetchTodoItems())
+  },
 })
 
-const App = ({ openCreateTodoDialog, todos }) => {
+const App = ({ openCreateTodoDialog, fetchTodoItems, todos }) => {
   // Used to control our create todo modal.
   const classes = useStyles()
 
   useEffect(() => {
-    // Any updates to the backend should come here.
-    // Backend is not implemented in this todo version.
-  }, [])
+    fetchTodoItems()
+  }, [fetchTodoItems])
 
   return (
     <>

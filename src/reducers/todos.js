@@ -1,20 +1,17 @@
 import * as ActionTypes from '../actions/types'
 
 const initialState = {
-  todos: [
-    {
-      id: new Date().getTime(),
-      title: 'Create your first todo',
-      description:
-        'Create your first todo by clicking on the button located on the top-right.',
-      done: false,
-    },
-  ],
+  todos: [],
 }
 
 export default function todos(state = initialState, action) {
   let nextState = {}
   switch (action.type) {
+    case ActionTypes.getTodoItems:
+      nextState = {
+        todos: action.payload,
+      }
+      break
     case ActionTypes.createTodoItem: {
       const createdTodo = {
         id: new Date().getTime(),
